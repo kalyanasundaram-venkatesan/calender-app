@@ -1,0 +1,100 @@
+swagger: '2.0'
+info:
+  title: Calendar App
+  description: >
+    REST API for calendar app.
+  version: 1.0.0
+schemes:
+  - http
+host: localhost
+basePath: /api
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /calendar-events:
+    get:
+      summary: Member Registration Endpoint.
+      description: >
+        This API is used to register memebrs.
+      tags:
+        - Calendar Events
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/CalendarEvents'
+        '400':
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Create new Calendar event.
+      tags:
+        - Calendar Events
+      parameters:
+        - name: name
+          in: body
+          type: string
+          description: Name of the event
+          required: true
+        - name: start_time
+          in: body
+          type: date-time
+          format: "YYYY-MM-DDTHH:MM:SSZ"
+          required: true
+        - name: end_time
+          in: body
+          type: date-time
+          format: "YYYY-MM-DDTHH:MM:SSZ"
+          required: true
+      responses:
+        '201':
+          description: CREATED
+          schema:
+            $ref: '#/definitions/CalendarEvent'
+        '400':
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  CalendarEvents:
+    properties:
+      calendar_event:
+        type: array
+        schema:
+          $ref: "#/definitions/CalendarEvent"
+  CalendarEvent:
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+        example: "Sync up with Manager..."
+      start_time:
+        type: string
+        format: date-time
+      end_time:
+        type: string
+        format: date-time
+  Error:
+    properties:
+      error_type:
+        type: string
+        description: Type of the error
+        example: FD-VALIDATION_ERROR-12345
+      message:
+        type: string
+        description: Type of the error
+        example: Some user friendly error message
+      errors:
+        type: array
+        items:
+          type: object
+          additionalProperties:
+            type: object
+            example:
+              additionalProp1: { }
+              additionalProp2: { }
